@@ -9,6 +9,10 @@ class Chords
     protected $hasBarre = false;
     protected $barrePosition = 0;
     protected $stringsCount = 6;
+    
+    protected $imagePadding = 5;
+    protected $fretBoardLength = 5;
+    protected $fretWidth = 8;
 
 //    public function __construct($chordString)
 //    {
@@ -141,13 +145,52 @@ class Chords
 
     public function getChordImage()
     {
-        $img = imagecreate(50, 50);
-        $color = imagecolorallocate($img, 0,0,0);
+        $width = (2 * $this->imagePadding) + ($this->fretBoardLength * $this->fretWidth);
+        $height = (2 * $this->imagePadding) + (5 * $this->stringsCount);
+        
+        $img = imagecreate($width, $height);
+//        $blackColor = imagecolorallocate($img, 0, 0, 0);
+//        $whiteColor = imagecolorallocate($img, 255, 255, 255);
 
-        imagefill($img, 5,5,$color);
-
+        $img = $this->generateFretboard($img);
+        
         $filename = md5( implode($this->listOfPositions) ) . '.png';
         imagepng($img, APP_DIR . '/images/' . $filename);
         return $filename;
+    }
+    
+    public function generateFretboard($img)
+    {
+        $blackColor = imagecolorallocate($img, 0, 0, 0);
+        $whiteColor = imagecolorallocate($img, 225, 225, 225);
+
+        imagefill($img, 5,5,$whiteColor);
+        
+        $step = 5;
+        $offset = 0;
+        $fretStep = 8;
+        
+        // strings
+        for ($i = 1; $i <= $this->stringsCount; $i++) {
+            imageline($img, 
+                $this->imagePadding + $fretStep, 
+                $offset + ($i * $step), 
+                50,
+                $offset + ($i * $step), 
+                $blackColor
+            );
+        }
+        // frets
+        for ($i = 1; $i <= 6; $i++) {
+            imageline($img, 
+                $this->imagePadding + ($i * $fretStep), 
+                $offset + $step, 
+                $this->imagePadding + ($i * $fretStep), 
+                $offset + ($this->stringsCount * $step), 
+                $blackColor
+            );
+        }
+        
+        return $img;
     }
 }

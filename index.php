@@ -1,4 +1,7 @@
-<?php define('APP_DIR', __DIR__); ?>
+<?php 
+define('APP_DIR', __DIR__);
+header('Content-type: text/html; charset=utf-8');
+?>
 <html>
 <head>
     <title>Chords</title>
