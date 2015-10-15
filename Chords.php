@@ -13,6 +13,7 @@ class Chords
     protected $imagePadding = 5;
     protected $fretBoardLength = 5;
     protected $fretWidth = 8;
+    protected $stringOffset = 5;
 
 //    public function __construct($chordString)
 //    {
@@ -146,51 +147,77 @@ class Chords
     public function getChordImage()
     {
         $width = (2 * $this->imagePadding) + ($this->fretBoardLength * $this->fretWidth);
-        $height = (2 * $this->imagePadding) + (5 * $this->stringsCount);
+        $height = (2 * $this->imagePadding) + ($this->stringOffset * ($this->stringsCount - 1));
         
         $img = imagecreate($width, $height);
 //        $blackColor = imagecolorallocate($img, 0, 0, 0);
 //        $whiteColor = imagecolorallocate($img, 255, 255, 255);
-
-        $img = $this->generateFretboard($img);
+        
+        $img = $this->generateFretboard($img, $width, $height);
+        $img = $this->generatePositions($img);
         
         $filename = md5( implode($this->listOfPositions) ) . '.png';
         imagepng($img, APP_DIR . '/images/' . $filename);
         return $filename;
     }
     
-    public function generateFretboard($img)
+    public function generateFretboard($img, $width, $height)
     {
         $blackColor = imagecolorallocate($img, 0, 0, 0);
         $whiteColor = imagecolorallocate($img, 225, 225, 225);
 
-        imagefill($img, 5,5,$whiteColor);
+        imagefill($img, 5,5, $whiteColor);
         
-        $step = 5;
-        $offset = 0;
-        $fretStep = 8;
-        
+        $padding = $this->imagePadding;
         // strings
-        for ($i = 1; $i <= $this->stringsCount; $i++) {
+        for ($i = 0; $i < $this->stringsCount; $i++) {
+            $stringPadding = $padding + ($i * $this->stringOffset);
             imageline($img, 
-                $this->imagePadding + $fretStep, 
-                $offset + ($i * $step), 
-                50,
-                $offset + ($i * $step), 
+                $padding, 
+                $stringPadding, 
+                $width - $padding,
+                $stringPadding, 
                 $blackColor
             );
         }
         // frets
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 0; $i < 6; $i++) {
+            $fretPadding = $padding + ($i * $this->fretWidth);
+            if ($i == 0) {
+                imageline($img,
+                    $fretPadding - 1,
+                    $padding,
+                    $fretPadding - 1,
+                    $padding + (($this->stringsCount - 1) * $this->stringOffset),
+                    $blackColor
+                );
+            }
             imageline($img, 
-                $this->imagePadding + ($i * $fretStep), 
-                $offset + $step, 
-                $this->imagePadding + ($i * $fretStep), 
-                $offset + ($this->stringsCount * $step), 
+                $fretPadding, 
+                $padding, 
+                $fretPadding, 
+                $padding + (($this->stringsCount - 1) * $this->stringOffset), 
                 $blackColor
             );
         }
         
+        return $img;
+    }
+    
+    protected function generatePositions($img)
+    {
+        $blackColor = imagecolorallocate($img, 0, 0, 0);
+        
+        if ($this->hasBarre) {
+            $barrePosition = $this->imagePadding + ($this->barrePosition * $this->fretWidth) + $this->fretWidth / 2;
+            imageline($img,
+                $barrePosition,
+                $this->imagePadding - 2,
+                $barrePosition,
+                $this->imagePadding + 2 + (($this->stringsCount - 1) * $this->stringOffset),
+                $blackColor
+            );
+        }
         return $img;
     }
 }
