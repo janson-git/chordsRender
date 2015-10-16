@@ -1,7 +1,3 @@
-<?php 
-define('APP_DIR', __DIR__);
-header('Content-type: text/html; charset=utf-8');
-?>
 <html>
 <head>
     <title>Chords</title>
@@ -20,21 +16,23 @@ header('Content-type: text/html; charset=utf-8');
 
 <form method="post">
     <div class="form-row">
-    <div class="label">
-        <label for="chord_string">Обозначение аккорда</label>
-    </div>
-    <div class="input-field">
-        <input type="text" id="chord_string" value="">
-    </div>
+        <div class="label">
+            <label for="chord_string">Обозначение аккорда</label>
+        </div>
+        <div class="input-field">
+            <input type="text" name="chord_string" id="chord_string">
+        </div>
     </div>
 
     <div class="form-row">
-    <div class="input-field">
-        <input type="submit" value="Сгенерировать изображение">
-    </div>
+        <div class="input-field">
+            <input type="submit" value="Сгенерировать изображение">
+        </div>
     </div>
 </form>
+
 <?php
+define('APP_DIR', __DIR__);
 
 require_once __DIR__ . '/Chords.php';
 

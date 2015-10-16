@@ -10,7 +10,7 @@ class Chords
     protected $barrePosition = 0;
     protected $stringsCount = 6;
     
-    protected $imagePadding = 5;
+    protected $imagePadding = 8;
     protected $fretBoardLength = 5;
     protected $fretWidth = 8;
     protected $stringOffset = 5;
@@ -200,6 +200,21 @@ class Chords
                 $blackColor
             );
         }
+
+        imageline($img,
+            $padding,
+            $padding,
+            $padding - 3,
+            $padding - 3,
+            $blackColor
+        );
+        imageline($img,
+            $padding,
+            $height - $padding,
+            $padding - 3,
+            $height - $padding + 3,
+            $blackColor
+        );
         
         return $img;
     }
@@ -209,7 +224,7 @@ class Chords
         $blackColor = imagecolorallocate($img, 0, 0, 0);
         
         if ($this->hasBarre) {
-            $barrePosition = $this->imagePadding + ($this->barrePosition * $this->fretWidth) + $this->fretWidth / 2;
+            $barrePosition = $this->imagePadding + $this->fretWidth / 2;
             imageline($img,
                 $barrePosition,
                 $this->imagePadding - 2,
@@ -217,7 +232,19 @@ class Chords
                 $this->imagePadding + 2 + (($this->stringsCount - 1) * $this->stringOffset),
                 $blackColor
             );
+            imageline($img,
+                $barrePosition - 1,
+                $this->imagePadding - 2,
+                $barrePosition - 1,
+                $this->imagePadding + 2 + (($this->stringsCount - 1) * $this->stringOffset),
+                $blackColor
+            );
+            
+            // TODO: need text mark of barre position
         }
+        
+        // TODO: set positions marks
+        
         return $img;
     }
 }
