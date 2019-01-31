@@ -10,10 +10,13 @@ class Chords
     protected $barrePosition = 0;
     protected $stringsCount = 6;
     
-    protected $imagePadding = 8;
+    protected $imagePadding = 10;
     protected $fretBoardLength = 5;
     protected $fretWidth = 8;
     protected $stringOffset = 5;
+
+    protected $font = 'slkscr.ttf';
+    protected $fontSize = 6;
 
 //    public function __construct($chordString)
 //    {
@@ -240,10 +243,47 @@ class Chords
                 $blackColor
             );
             
-            // TODO: need text mark of barre position
+            // need text mark of barre position
+            // TODO: convert  barre position to romans fret number
+            imagettftext($img,
+                $this->fontSize,
+                0,
+                $barrePosition - 1,
+                2*$this->imagePadding - 1 + (($this->stringsCount - 1) * $this->stringOffset),
+                $blackColor,
+                __DIR__ . '/fonts/' . $this->font,
+                $this->barrePosition
+            );
         }
-        
-        // TODO: set positions marks
+
+        $firstPosition = $this->hasBarre ? $this->barrePosition : 0;
+
+        // set positions marks
+        foreach ($this->listOfPositions as $key => $val) {
+            $key = $this->stringsCount - ($key + 1);
+            switch ($val) {
+                case 'x':
+                    // TODO: display 'x' on muted string
+                    break;
+                case 'o':
+                    // TODO: display 'x' on open string
+                    break;
+                default:
+                    if ($this->hasBarre && $val === $this->barrePosition) {
+                        continue 2;
+                    }
+                    $x = $this->imagePadding + $this->fretWidth / 2 + ($val - $firstPosition) * $this->fretWidth;
+                    $y = $this->imagePadding + ($key * $this->stringOffset);
+            }
+
+            imagefilledellipse($img,
+                $x,
+                $y,
+                5,
+                5,
+                $blackColor
+            );
+        }
         
         return $img;
     }
