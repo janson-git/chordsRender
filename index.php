@@ -34,7 +34,7 @@
 <?php
 define('APP_DIR', __DIR__);
 
-require_once __DIR__ . '/Chords.php';
+require_once __DIR__ . '/src/Chords.php';
 
 
 $string = isset($_POST['chord_string']) ? $_POST['chord_string'] : '000000';

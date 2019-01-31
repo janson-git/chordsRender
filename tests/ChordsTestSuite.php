@@ -1,6 +1,6 @@
 <?php
 
-require_once APP_DIR . '/Chords.php';
+require_once APP_DIR . '/src/Chords.php';
 
 class ChordsTestSuite
 {

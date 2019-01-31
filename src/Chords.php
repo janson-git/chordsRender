@@ -251,22 +251,46 @@ class Chords
                 $barrePosition - 1,
                 2*$this->imagePadding - 1 + (($this->stringsCount - 1) * $this->stringOffset),
                 $blackColor,
-                __DIR__ . '/fonts/' . $this->font,
+                APP_DIR . '/fonts/' . $this->font,
                 $this->barrePosition
             );
         }
 
-        $firstPosition = $this->hasBarre ? $this->barrePosition : 0;
+        $firstPosition = $this->hasBarre ? $this->barrePosition : 1;
 
         // set positions marks
         foreach ($this->listOfPositions as $key => $val) {
             $key = $this->stringsCount - ($key + 1);
             switch ($val) {
                 case 'x':
-                    // TODO: display 'x' on muted string
+                    // display 'x' on muted string
+                    $x = $this->imagePadding - $this->fretWidth;
+                    $y = $this->imagePadding + ($key * $this->stringOffset) + $this->stringOffset / 2 + 1;
+
+                    imagettftext($img,
+                        $this->fontSize - 1,
+                        0,
+                        $x,
+                        $y,
+                        $blackColor,
+                        APP_DIR . '/fonts/' . $this->font,
+                        'x'
+                    );
                     break;
                 case 'o':
-                    // TODO: display 'x' on open string
+                    // display 'o' on open string
+                    $x = $this->imagePadding - $this->fretWidth;
+                    $y = $this->imagePadding + ($key * $this->stringOffset) + $this->stringOffset / 2 + 1;
+
+                    imagettftext($img,
+                        $this->fontSize,
+                        0,
+                        $x,
+                        $y,
+                        $blackColor,
+                        APP_DIR . '/fonts/' . $this->font,
+                        'O'
+                    );
                     break;
                 default:
                     if ($this->hasBarre && $val === $this->barrePosition) {
@@ -274,15 +298,15 @@ class Chords
                     }
                     $x = $this->imagePadding + $this->fretWidth / 2 + ($val - $firstPosition) * $this->fretWidth;
                     $y = $this->imagePadding + ($key * $this->stringOffset);
-            }
 
-            imagefilledellipse($img,
-                $x,
-                $y,
-                5,
-                5,
-                $blackColor
-            );
+                    imagefilledellipse($img,
+                        $x,
+                        $y,
+                        5,
+                        5,
+                        $blackColor
+                    );
+            }
         }
         
         return $img;
