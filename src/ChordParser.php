@@ -94,7 +94,7 @@ class ChordParser
 
         $hasBarre = false;
         $barrePosition = 0;
-        if (!$hasMuted && !$hasOpened && $min > 0) {
+        if (!$hasOpened && $min > 0) {
             $hasBarre = true;
             $barrePosition = $min;
         }
