@@ -17,7 +17,6 @@ try {
 
     $render = new ChordRender();
     $imgfile = $render->getChordImage($chord);
-
 } catch (\ChordsException $e) {
     $error = $e->getMessage();
 }
@@ -85,12 +84,9 @@ try {
     <?= $string ?>
 </div>
 <?php
-if ($imgfile !== null) {
-    ?>
+if ($imgfile !== null) { ?>
     <img src="/images/<?= $imgfile ?>">
-    <?php
-}
-?>
+<?php } ?>
 </body>
 </html>
 

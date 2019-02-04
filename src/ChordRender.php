@@ -1,5 +1,7 @@
 <?php
 
+require_once 'lib/RomansConverter.php';
+
 
 class ChordRender
 {
@@ -91,7 +93,7 @@ class ChordRender
     {
         $stringsCount = $chord->getStringsCount();
         $hasBarre = $chord->hasBarre();
-        $barrePosition = $chord->getBarrePosition();
+        $chordBarrePosition = $chord->getBarrePosition();
 
         $blackColor = imagecolorallocate($img, 0, 0, 0);
 
@@ -117,15 +119,15 @@ class ChordRender
             imagettftext($img,
                 $this->fontSize,
                 0,
-                $barrePosition - 1,
+                $barrePosition - 3,
                 2*$this->imagePadding - 1 + (($stringsCount - 1) * $this->stringOffset),
                 $blackColor,
                 APP_DIR . '/fonts/' . $this->font,
-                $barrePosition
+                RomansConverter::number2roman($chordBarrePosition) ?? '?'
             );
         }
 
-        $firstPosition = $hasBarre ? $barrePosition : 1;
+        $firstPosition = $hasBarre ? $chordBarrePosition : 1;
 
         // set positions marks
         foreach ($chord->getPositions() as $key => $val) {
