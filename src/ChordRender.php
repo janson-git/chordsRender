@@ -169,7 +169,7 @@ class ChordRender
                         break;
                 }
             } else {
-                if ($hasBarre && $val === $barrePosition) {
+                if ($hasBarre && $val === $chordBarrePosition) {
                     continue;
                 }
 
