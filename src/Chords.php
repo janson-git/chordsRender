@@ -53,7 +53,7 @@ class Chords
             return false;
         }
         // если есть символы '|' - то делим строку по ним. В противном случае - делим посимвольно.
-        if ($pos = strpos($chordString, '|') !== false) {
+        if ($pos = (strpos($chordString, '|') !== false)) {
             if ($pos === 0) {
                 $this->validationError = 'Chord string starts with \'|\' char.';
                 return false;
@@ -261,41 +261,48 @@ class Chords
         // set positions marks
         foreach ($this->listOfPositions as $key => $val) {
             $key = $this->stringsCount - ($key + 1);
-            switch ($val) {
-                case 'x':
-                    // display 'x' on muted string
-                    $x = $this->imagePadding - $this->fretWidth;
-                    $y = $this->imagePadding + ($key * $this->stringOffset) + $this->stringOffset / 2 + 1;
 
-                    imagettftext($img,
-                        $this->fontSize - 1,
-                        0,
-                        $x,
-                        $y,
-                        $blackColor,
-                        APP_DIR . '/fonts/' . $this->font,
-                        'x'
-                    );
-                    break;
-                case 'o':
-                    // display 'o' on open string
-                    $x = $this->imagePadding - $this->fretWidth;
-                    $y = $this->imagePadding + ($key * $this->stringOffset) + $this->stringOffset / 2 + 1;
+            if (is_string($val)) {
+                switch ($val) {
+                    case 'x':
+                        // display 'x' on muted string
+                        $x = $this->imagePadding - $this->fretWidth;
+                        $y = $this->imagePadding + ($key * $this->stringOffset) + $this->stringOffset / 2 + 1;
 
-                    imagettftext($img,
-                        $this->fontSize,
-                        0,
-                        $x,
-                        $y,
-                        $blackColor,
-                        APP_DIR . '/fonts/' . $this->font,
-                        'O'
-                    );
-                    break;
-                default:
-                    if ($this->hasBarre && $val === $this->barrePosition) {
-                        continue 2;
-                    }
+                        imagettftext($img,
+                            $this->fontSize - 1,
+                            0,
+                            $x,
+                            $y,
+                            $blackColor,
+                            APP_DIR . '/fonts/' . $this->font,
+                            'x'
+                        );
+                        break;
+                    case 'o':
+                        // display 'o' on open string
+                        $x = $this->imagePadding - $this->fretWidth;
+                        $y = $this->imagePadding + ($key * $this->stringOffset) + $this->stringOffset / 2 + 1;
+
+                        imagettftext($img,
+                            $this->fontSize,
+                            0,
+                            $x,
+                            $y,
+                            $blackColor,
+                            APP_DIR . '/fonts/' . $this->font,
+                            'O'
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                if ($this->hasBarre && $val === $this->barrePosition) {
+                    continue;
+                }
+
+                if ($val !== 0) {
                     $x = $this->imagePadding + $this->fretWidth / 2 + ($val - $firstPosition) * $this->fretWidth;
                     $y = $this->imagePadding + ($key * $this->stringOffset);
 
@@ -306,6 +313,7 @@ class Chords
                         5,
                         $blackColor
                     );
+                }
             }
         }
         

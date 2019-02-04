@@ -37,7 +37,7 @@ define('APP_DIR', __DIR__);
 require_once __DIR__ . '/src/Chords.php';
 
 
-$string = isset($_POST['chord_string']) ? $_POST['chord_string'] : '000000';
+$string = isset($_POST['chord_string']) ? $_POST['chord_string'] : '002210';
 
 $chords = new Chords();
 //$string = 'X22oXX';
@@ -48,6 +48,9 @@ $chords->parseChordString($string);
 $imgfile = $chords->getChordImage();
 
 ?>
+<div>
+    <?= $string ?>
+</div>
 <img src="/images/<?= $imgfile ?>">
 </body>
 </html>
