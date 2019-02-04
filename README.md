@@ -15,3 +15,5 @@ How to join:
 3. open project index page in browser and enjoy!
 
 Type in browser url: `http://localhost:5444`
+
+![](chord-render-sample.png)
